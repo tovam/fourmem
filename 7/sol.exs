@@ -9,9 +9,8 @@ defmodule Bags do
 	def parse_rev_rule([container|content]), do: add_rev_content(content, container)
 	def count_children(m, root) do
 		(m[root]||%{})
-		|> Enum.map(fn {type,n} -> n*count_children(m, type) end)
+		|> Enum.map(fn {type,n} -> n*(1+count_children(m, type)) end)
 		|> Enum.sum()
-		|> (& &1+1).()
 	end
 	def find_all_children(m, root) do
 		List.wrap(m[root])
@@ -33,7 +32,6 @@ defmodule Bags do
 	def main2() do
 		final_rules(&parse_rule/1)
 		|> count_children("shiny gold")
-		|> (& &1-1).()
 		|> IO.inspect()
 	end
 end
